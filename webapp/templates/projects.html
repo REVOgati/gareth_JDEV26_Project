@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Projects - Task Manager{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Projects</h1>
+    <a href="{{ url_for('new_project') }}" class="btn btn-primary">Add New Project</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Owner</th>
+                <th>Created At</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project['projects.id'] }}</td>
+                <td>{{ project['projects.name'] }}</td>
+                <td>{{ project['projects.description'] }}</td>
+                <td>{{ project['users.username'] or 'N/A' }}</td>
+                <td>{{ project['projects.created_at'] }}</td>
+                <td>
+                    <a href="{{ url_for('edit_project', project_id=project['projects.id']) }}" class="btn btn-sm btn-secondary">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_project', project_id=project['projects.id']) }}" style="display: inline;" onsubmit="return confirm('Are you sure?');">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

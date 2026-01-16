@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Task Manager{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h1>Welcome to Task Manager</h1>
+    <p>A demonstration of a custom-built RDBMS with full CRUD operations</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>{{ total_users }}</h3>
+        <p>Users</p>
+        <a href="{{ url_for('list_users') }}" class="btn btn-primary">Manage Users</a>
+    </div>
+    <div class="stat-card">
+        <h3>{{ total_projects }}</h3>
+        <p>Projects</p>
+        <a href="{{ url_for('list_projects') }}" class="btn btn-primary">Manage Projects</a>
+    </div>
+    <div class="stat-card">
+        <h3>{{ total_tasks }}</h3>
+        <p>Tasks</p>
+        <a href="{{ url_for('list_tasks') }}" class="btn btn-primary">Manage Tasks</a>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Recent Tasks</h2>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Due Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks[:5] %}
+                <tr>
+                    <td>{{ task.id }}</td>
+                    <td>{{ task.title }}</td>
+                    <td><span class="badge badge-{{ task.status }}">{{ task.status }}</span></td>
+                    <td><span class="badge badge-{{ task.priority }}">{{ task.priority }}</span></td>
+                    <td>{{ task.due_date or 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Features</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>🗄️ Custom RDBMS</h3>
+            <p>Built from scratch with support for multiple data types, indexes, and constraints</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔍 SQL Support</h3>
+            <p>Full SQL parser with CREATE, INSERT, SELECT, UPDATE, DELETE operations</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔗 JOIN Operations</h3>
+            <p>INNER and LEFT JOIN support for complex queries</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔑 Constraints</h3>
+            <p>Primary keys, unique constraints, and indexing for data integrity</p>
+        </div>
+        <div class="feature-card">
+            <h3>💾 Persistence</h3>
+            <p>Save and load database state from JSON files</p>
+        </div>
+        <div class="feature-card">
+            <h3>🖥️ Interactive REPL</h3>
+            <p>Command-line interface for direct database interaction</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
