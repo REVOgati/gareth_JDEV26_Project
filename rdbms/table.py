@@ -63,17 +63,19 @@ class Table:
                     raise ValueError(f"Column {col_name} is required")
                 values[col_name] = None
         
-        # Validate and cast values
+        # Cast and validate values
         row = {}
         for col_name, value in values.items():
             if col_name not in self.columns:
                 raise ValueError(f"Column {col_name} does not exist")
             
             col = self.columns[col_name]
-            if not col.data_type.validate(value):
-                raise ValueError(f"Invalid value for column {col_name}: {value}")
-            
-            row[col_name] = col.data_type.cast(value)
+            # Cast first, then validate the casted value
+            try:
+                casted_value = col.data_type.cast(value)
+                row[col_name] = casted_value
+            except (ValueError, TypeError) as e:
+                raise ValueError(f"Invalid value for column {col_name}: {value} - {str(e)}")
         
         # Check unique constraints via indexes
         for col_name, index in self.indexes.items():
