@@ -201,7 +201,7 @@ CREATE UNIQUE INDEX idx_name ON table_name (column_name);
 
 ## Limitations
 
-This is a simple educational RDBMS with the following limitations:
+This is a simple medium-level RDBMS practice project with the following limitations:
 - In-memory storage (with JSON persistence)
 - No transaction support
 - No concurrent access handling
