@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Edit' if user else 'New' }} User - Task Manager{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ 'Edit' if user else 'New' }} User</h1>
+</div>
+
+<div class="form-container">
+    <form method="POST">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" 
+                   value="{{ user.username if user else '' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" class="form-control" 
+                   value="{{ user.email if user else '' }}" required>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ 'Update' if user else 'Create' }}</button>
+            <a href="{{ url_for('list_users') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

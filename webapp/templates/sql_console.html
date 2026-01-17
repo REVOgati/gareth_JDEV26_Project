@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}SQL Console - Task Manager{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>SQL Console</h1>
+    <p>Execute SQL queries directly on the database</p>
+</div>
+
+<div class="sql-console">
+    <form method="POST">
+        <div class="form-group">
+            <label for="sql">SQL Query</label>
+            <textarea id="sql" name="sql" class="form-control sql-textarea" rows="8" placeholder="Enter SQL query here...">{{ request.form.get('sql', '') }}</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Execute</button>
+    </form>
+
+    {% if error %}
+    <div class="alert alert-error">
+        <strong>Error:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    {% if result %}
+    <div class="result-container">
+        <h3>Result:</h3>
+        {% if result is string %}
+            <div class="alert alert-success">{{ result }}</div>
+        {% elif result is sequence %}
+            {% if result|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                {% for col in result[0].keys() %}
+                                <th>{{ col }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in result %}
+                            <tr>
+                                {% for value in row.values() %}
+                                <td>{{ value if value is not none else 'NULL' }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <p class="result-info">{{ result|length }} row(s) returned</p>
+            {% else %}
+                <div class="alert alert-info">No rows returned</div>
+            {% endif %}
+        {% else %}
+            <pre>{{ result }}</pre>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="sql-help">
+    <h3>Example Queries</h3>
+    <pre>-- List all tables
+SELECT * FROM users;
+
+-- Create a new table
+CREATE TABLE test (id INTEGER PRIMARY KEY, name VARCHAR(50));
+
+-- Insert data
+INSERT INTO test (id, name) VALUES (1, 'Test User');
+
+-- Update data
+UPDATE tasks SET status = 'completed' WHERE id = 1;
+
+-- Delete data
+DELETE FROM tasks WHERE completed = TRUE;
+
+-- Join query
+SELECT * FROM tasks JOIN projects ON tasks.project_id = projects.id;</pre>
+</div>
+{% endblock %}
